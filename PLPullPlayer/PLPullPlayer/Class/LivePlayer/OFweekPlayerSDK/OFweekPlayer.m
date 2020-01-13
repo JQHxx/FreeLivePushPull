@@ -36,7 +36,7 @@
 @property (strong, nonatomic) NSLayoutConstraint *noticeLabelHeightConstraint;
 
 @property (strong, nonatomic) MSWeakTimer *durationTimer;
-@property (strong, nonatomic) NSTimer *unplayableTimer;
+@property (strong, nonatomic) MSWeakTimer *unplayableTimer;
 // 防止循环引用
 @property (weak, nonatomic) UIViewController *currentVC;
 
@@ -376,6 +376,8 @@
     self.player = [PLPlayer playerWithURL:url option:option];
     if (self.playerMode == OFweekPlayerModeVOD) {
         [self.player setBackgroundPlayEnable:NO];
+        // 支持循环播放
+        [self.player setLoopPlay:YES];
     }
     NSLog(@"阿刁,%@,%@",NSStringFromCGRect(self.bounds),NSStringFromCGRect(self.frame));
     self.player.playerView.frame = self.bounds;
@@ -430,6 +432,7 @@
     else {
         _controlsView = [[WaitingPlayerControlsView  alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)];
     }
+//    [_controlsView setShowSeconds:15];
     NSLog(@"实际设置的显示秒数为：%d",_showControlsSeconds);
     [_controlsView setShowSeconds:_showControlsSeconds];
     _controlsView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -468,15 +471,8 @@
     // 当发生错误，停止播放时，会回调这个方法
 }
 
-- (void)player:(nonnull PLPlayer *)player codecError:(nonnull NSError *)error {
-  // 当解码器发生错误时，会回调这个方法
-  // 当 videotoolbox 硬解初始化或解码出错时
-  // error.code 值为 PLPlayerErrorHWCodecInitFailed/PLPlayerErrorHWDecodeFailed
-  // 播发器也将自动切换成软解，继续播放
-}
-
 - (void)player:(nonnull PLPlayer *)player seekToCompleted:(BOOL)isCompleted {
-    //[self.controlsView setActivityIndicatiorViewHidden:YES];
+    [self.controlsView setActivityIndicatiorViewHidden:YES];
 }
 
 - (void)player:(nonnull PLPlayer *)player loadedTimeRange:(CMTime)timeRange {
@@ -486,16 +482,8 @@
     [self.controlsView updateProgressSliderPosition:(durationSeconds - startSeconds) / totalDuration];
 }
 
-- (void)player:(nonnull PLPlayer *)player firstRender:(PLPlayerFirstRenderType)firstRenderType {
-    if (PLPlayerFirstRenderTypeVideo == firstRenderType) {
-    }
-
-    Float64 currentPlaybackTime = CMTimeGetSeconds(self.player.currentTime);
-    Float64 duration = CMTimeGetSeconds(self.player.totalDuration);
-    float positionPercent = currentPlaybackTime/duration;
-    [self.controlsView updateProgressSliderPosition:positionPercent];
-    NSString *strTime2 = [self timeFormatted:duration];
-    [self.controlsView updateDurationLabel:@"00:00:00" durationString:strTime2];
+- (void)player:(nonnull PLPlayer *)player width:(int)width height:(int)height {
+    
 }
 
 #pragma mark - 读取状态改变
@@ -547,11 +535,12 @@
     }
 
     if (self.player.status == PLPlayerStatusPlaying && _playerMode==OFweekPlayerModeVOD && !_sliderIsDrag) {
-        _durationTimer = [MSWeakTimer scheduledTimerWithTimeInterval:.5 target:self selector:@selector(updateDuration) userInfo:nil repeats:YES dispatchQueue:dispatch_get_main_queue()];
+        [self addDurationTimer];
     }
     
     switch (_player.status) {
         case PLPlayerStatusStopped: {
+            [self removeDurationTimer];
             NSLog(@"moviePlayBackStateDidChange %d: stoped,hxw", (int)_player.status);
             [self.controlsView updateControlsWithPlayerState:OFweekPlayerStateStopped];
             [self.controlsView setActivityIndicatiorViewHidden:YES];
@@ -577,7 +566,6 @@
             if(_playerMode == OFweekPlayerModeLIVE && self.isSeeked == NO && _isVodLive) {
                 // 快进
                 [self.player seekTo:CMTimeMake(self.vodliveSeekTime * 1000, 1000)];
-                //self.player.currentPlaybackTime = self.vodliveSeekTime;
                 self.isSeeked = YES;
             }
             break;
@@ -598,6 +586,18 @@
     }
 }
 
+- (void) addDurationTimer {
+    [self removeDurationTimer];
+    _durationTimer = [MSWeakTimer scheduledTimerWithTimeInterval:.5 target:self selector:@selector(updateDuration) userInfo:nil repeats:YES dispatchQueue:dispatch_get_main_queue()];
+}
+
+- (void) removeDurationTimer {
+    if(_durationTimer) {
+        [_durationTimer invalidate];
+        _durationTimer = nil;
+    }
+}
+
 - (void)startButtonClicked {
     if (_delegate && [_delegate respondsToSelector:@selector(playerStartButtonClicked)]) {
         [_delegate playerStartButtonClicked];
@@ -605,13 +605,13 @@
     
     if(self.player.status == PLPlayerStatusUnknow) {
         if(!_unplayableTimer) {
-            _unplayableTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(unplayableTimerTicker) userInfo:nil repeats:YES];
+            _unplayableTimer = [MSWeakTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(unplayableTimerTicker) userInfo:nil repeats:YES dispatchQueue:dispatch_get_main_queue()];
+            //_unplayableTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(unplayableTimerTicker) userInfo:nil repeats:YES];
         }
     }else {
         if ([self.player isPlaying]) {
             [self.player pause];
-        }
-        if(self.player.status == PLPlayerStatusPaused) {
+        } else {
             [self.player resume];
         }
 
@@ -735,10 +735,12 @@
         if(orientation == UIInterfaceOrientationLandscapeRight) {
             [self rotateFromAngle:LANDSCAPE_RIGHT_ANGLE curOrientation:tempCurOrientation];
             [_controlsView updateControlsWithFullScreenState:YES];
-        }else if(orientation == UIInterfaceOrientationLandscapeLeft) {
+        }
+        else if(orientation == UIInterfaceOrientationLandscapeLeft) {
             [self rotateFromAngle:LANDSCAPE_LEFT_ANGLE curOrientation:tempCurOrientation];
             [_controlsView updateControlsWithFullScreenState:YES];
-        }else if(orientation == UIInterfaceOrientationPortrait) {
+        }
+        else if(orientation == UIInterfaceOrientationPortrait) {
             [self rotateFromAngle:PROTRAIT_ANGLE curOrientation:tempCurOrientation];
             [_controlsView updateControlsWithFullScreenState:NO];
         }

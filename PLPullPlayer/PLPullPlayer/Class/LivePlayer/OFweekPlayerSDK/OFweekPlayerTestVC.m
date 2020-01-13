@@ -10,7 +10,6 @@
 #import <Masonry.h>
 #import "OFweekPlayerTestVC.h"
 #import "OFweekPlayer.h"
-//#import <IJKMediaFramework/IJKMediaFramework.h>
 
 @interface OFweekPlayerTestVC () <OFweekPlayerDelegate>
 
@@ -63,6 +62,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.edgesForExtendedLayout = UIRectEdgeNone;
     [self addTestButton];
     

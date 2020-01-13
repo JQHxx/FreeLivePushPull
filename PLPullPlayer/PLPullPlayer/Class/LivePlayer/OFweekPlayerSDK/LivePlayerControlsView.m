@@ -8,6 +8,7 @@
 
 #import "LivePlayerControlsView.h"
 #import "SpreadButton.h"
+#import <MSWeakTimer.h>
 
 const CGFloat LiveBottomControlsView_HEIGHT = 55.0f;
 
@@ -28,7 +29,7 @@ const CGFloat LiveBottomControlsView_HEIGHT = 55.0f;
 
 @property (strong, nonatomic) UIView *topControlsView;
 //
-@property (strong, nonatomic) NSTimer *hideTimer;
+@property (strong, nonatomic) MSWeakTimer *hideTimer;
 //
 @property (strong, nonatomic) UIActivityIndicatorView *activityIndicatiorView;
 
@@ -168,7 +169,8 @@ const CGFloat LiveBottomControlsView_HEIGHT = 55.0f;
     [self.delegate controlsViewHiddenChanged:_bottomControlsView.hidden];
     
     if(!_bottomControlsView.hidden) {
-        self.hideTimer = [NSTimer scheduledTimerWithTimeInterval:self.showControlsSeconds target:self selector:@selector(countDownFinished) userInfo:nil repeats:NO];
+        self.hideTimer = [MSWeakTimer scheduledTimerWithTimeInterval:self.showControlsSeconds target:self selector:@selector(countDownFinished) userInfo:nil repeats:NO dispatchQueue:dispatch_get_main_queue()];
+        //self.hideTimer = [NSTimer scheduledTimerWithTimeInterval:self.showControlsSeconds target:self selector:@selector(countDownFinished) userInfo:nil repeats:NO];
     }
 }
 
@@ -178,7 +180,8 @@ const CGFloat LiveBottomControlsView_HEIGHT = 55.0f;
 
 - (void)setShowSeconds:(int)seconds {
     self.showControlsSeconds = seconds;
-    self.hideTimer = [NSTimer scheduledTimerWithTimeInterval:self.showControlsSeconds target:self selector:@selector(countDownFinished) userInfo:nil repeats:NO];
+    self.hideTimer = [MSWeakTimer scheduledTimerWithTimeInterval:self.showControlsSeconds target:self selector:@selector(countDownFinished) userInfo:nil repeats:NO dispatchQueue:dispatch_get_main_queue()];
+    //self.hideTimer = [NSTimer scheduledTimerWithTimeInterval:self.showControlsSeconds target:self selector:@selector(countDownFinished) userInfo:nil repeats:NO];
 }
 
 - (void)addHitsLabel {
@@ -228,6 +231,7 @@ const CGFloat LiveBottomControlsView_HEIGHT = 55.0f;
 - (void)addShareButton {
     _shareButton = [SpreadButton buttonWithType:UIButtonTypeCustom];
     [_shareButton addTarget:self action:@selector(shareButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [_shareButton setHidden:YES];
     _shareButton.minimumHitTestWidth = 60;
     _shareButton.minimumHitTestHight = 60;
     [_shareButton setImage:[UIImage imageNamed:@"ShareIcon"] forState:UIControlStateNormal];
@@ -263,6 +267,7 @@ const CGFloat LiveBottomControlsView_HEIGHT = 55.0f;
 - (void)addReturnButton {
     SpreadButton *returnButton = [SpreadButton buttonWithType:UIButtonTypeCustom];
     [returnButton addTarget:self action:@selector(returnButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [returnButton setHidden:YES];
     returnButton.minimumHitTestWidth = 60;
     returnButton.minimumHitTestHight = 60;
     [returnButton setImage:[UIImage imageNamed:@"playerReturnButton"] forState:UIControlStateNormal];
@@ -283,7 +288,8 @@ const CGFloat LiveBottomControlsView_HEIGHT = 55.0f;
         NSLog(@"endThisTicker action");
         [self.hideTimer invalidate];
         self.hideTimer = nil;
-        self.hideTimer = [NSTimer scheduledTimerWithTimeInterval:self.showControlsSeconds target:self selector:@selector(countDownFinished) userInfo:nil repeats:NO];
+        self.hideTimer = [MSWeakTimer scheduledTimerWithTimeInterval:self.showControlsSeconds target:self selector:@selector(countDownFinished) userInfo:nil repeats:NO dispatchQueue:dispatch_get_main_queue()];
+        //self.hideTimer = [NSTimer scheduledTimerWithTimeInterval:self.showControlsSeconds target:self selector:@selector(countDownFinished) userInfo:nil repeats:NO];
         return;
     }
     
@@ -292,7 +298,8 @@ const CGFloat LiveBottomControlsView_HEIGHT = 55.0f;
         self.resetThisTicker = NO;
         [self.hideTimer invalidate];
         self.hideTimer = nil;
-        self.hideTimer = [NSTimer scheduledTimerWithTimeInterval:self.showControlsSeconds target:self selector:@selector(countDownFinished) userInfo:nil repeats:NO];
+        self.hideTimer = [MSWeakTimer scheduledTimerWithTimeInterval:self.showControlsSeconds target:self selector:@selector(countDownFinished) userInfo:nil repeats:NO dispatchQueue:dispatch_get_main_queue()];
+        //self.hideTimer = [NSTimer scheduledTimerWithTimeInterval:self.showControlsSeconds target:self selector:@selector(countDownFinished) userInfo:nil repeats:NO];
         return;
     }
     

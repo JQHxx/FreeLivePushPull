@@ -12,7 +12,6 @@
 #import "LivePlayerControlsView.h"
 #import "PicPlayerControlsView.h"
 #import "WaitingPlayerControlsView.h"
-//#import <IJKMediaFramework/IJKMediaFramework.h>
 #import <PLPlayerKit/PLPlayerKit.h>
 
 @protocol OFweekPlayerDelegate <NSObject>
@@ -32,7 +31,7 @@ typedef NS_ENUM(NSInteger, OFweekPlayerMode){
     OFweekPlayerModeVOD = 1,    // 直播回顾
     OFweekPlayerModeLIVE = 2,   // 直播
     OFweekPlayerModePIC = 3,    // ppt 直播
-    OFweekPlayerModeWaiting = 4 // 预告未开始
+    OFweekPlayerModeWaiting = 4 // 预告
 };
 
 typedef NS_ENUM(NSInteger, OFweekPlayerState){
@@ -55,8 +54,14 @@ typedef NS_ENUM(NSInteger, OFweekPlayerNetState){
 
 @interface OFweekPlayer : UIView
 
+/**
+@b 七牛云播放器
+*/
 @property (nonatomic, strong) PLPlayer *player;
 
+/**
+@b 播放器上的子控件
+*/
 @property (strong, nonatomic) OFweekPlayerControlsView *controlsView;
 
 /**

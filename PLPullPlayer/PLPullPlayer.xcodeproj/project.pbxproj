@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		2199161057B9D4952A137388 /* libPods-PLPullPlayerTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DBC7E9028A6166CBF7D2245 /* libPods-PLPullPlayerTests.a */; };
-		66618BE923CB00C6000FAA14 /* PLPlayerKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66FB49C723CAFE05004099D9 /* PLPlayerKit.framework */; };
-		66618BEA23CB00C6000FAA14 /* PLPlayerKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 66FB49C723CAFE05004099D9 /* PLPlayerKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		66B8FDAE23CA14D800ACF3F9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B8FDAD23CA14D800ACF3F9 /* AppDelegate.m */; };
 		66B8FDB423CA14D800ACF3F9 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B8FDB323CA14D800ACF3F9 /* ViewController.m */; };
 		66B8FDB723CA14D800ACF3F9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66B8FDB523CA14D800ACF3F9 /* Main.storyboard */; };
@@ -18,7 +16,6 @@
 		66B8FDBF23CA14DB00ACF3F9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B8FDBE23CA14DB00ACF3F9 /* main.m */; };
 		66B8FDC923CA14DB00ACF3F9 /* PLPullPlayerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B8FDC823CA14DB00ACF3F9 /* PLPullPlayerTests.m */; };
 		66B8FDD423CA14DB00ACF3F9 /* PLPullPlayerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B8FDD323CA14DB00ACF3F9 /* PLPullPlayerUITests.m */; };
-		66E3B23623CA19AB003BDF50 /* NewKSYLivePushView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E3B23223CA19AB003BDF50 /* NewKSYLivePushView.m */; };
 		66E3B23723CA19AB003BDF50 /* SpreadButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E3B23423CA19AB003BDF50 /* SpreadButton.m */; };
 		66E3B24B23CA1B84003BDF50 /* PicPlayerControlsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E3B23B23CA1B84003BDF50 /* PicPlayerControlsView.m */; };
 		66E3B24C23CA1B84003BDF50 /* WaitingPlayerControlsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E3B24023CA1B84003BDF50 /* WaitingPlayerControlsView.m */; };
@@ -50,20 +47,6 @@
 		};
 /* End PBXContainerItemProxy section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		66618BEB23CB00C7000FAA14 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				66618BEA23CB00C6000FAA14 /* PLPlayerKit.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
 		1D4B64A2F0DE8B5D2592D1A8 /* Pods-PLPullPlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PLPullPlayer.release.xcconfig"; path = "Target Support Files/Pods-PLPullPlayer/Pods-PLPullPlayer.release.xcconfig"; sourceTree = "<group>"; };
 		43F4696FA52910E81C8AFF2C /* Pods-PLPullPlayerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PLPullPlayerTests.debug.xcconfig"; path = "Target Support Files/Pods-PLPullPlayerTests/Pods-PLPullPlayerTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -84,10 +67,8 @@
 		66B8FDCF23CA14DB00ACF3F9 /* PLPullPlayerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PLPullPlayerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		66B8FDD323CA14DB00ACF3F9 /* PLPullPlayerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLPullPlayerUITests.m; sourceTree = "<group>"; };
 		66B8FDD523CA14DB00ACF3F9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		66E3B23223CA19AB003BDF50 /* NewKSYLivePushView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewKSYLivePushView.m; sourceTree = "<group>"; };
 		66E3B23323CA19AB003BDF50 /* SpreadButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpreadButton.h; sourceTree = "<group>"; };
 		66E3B23423CA19AB003BDF50 /* SpreadButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpreadButton.m; sourceTree = "<group>"; };
-		66E3B23523CA19AB003BDF50 /* NewKSYLivePushView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewKSYLivePushView.h; sourceTree = "<group>"; };
 		66E3B23923CA1B84003BDF50 /* VODPlayerControlsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VODPlayerControlsView.h; sourceTree = "<group>"; };
 		66E3B23A23CA1B84003BDF50 /* LivePlayerControlsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LivePlayerControlsView.h; sourceTree = "<group>"; };
 		66E3B23B23CA1B84003BDF50 /* PicPlayerControlsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PicPlayerControlsView.m; sourceTree = "<group>"; };
@@ -106,7 +87,6 @@
 		66E3B24823CA1B84003BDF50 /* OFweekPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OFweekPlayer.m; sourceTree = "<group>"; };
 		66E3B24923CA1B84003BDF50 /* WaitingPlayerControlsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WaitingPlayerControlsView.h; sourceTree = "<group>"; };
 		66E3B24A23CA1B84003BDF50 /* OFweekPlayerTestVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OFweekPlayerTestVC.m; sourceTree = "<group>"; };
-		66FB49C723CAFE05004099D9 /* PLPlayerKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PLPlayerKit.framework; sourceTree = "<group>"; };
 		6EF02945F3901FE987C4FD43 /* Pods-PLPullPlayerUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PLPullPlayerUITests.debug.xcconfig"; path = "Target Support Files/Pods-PLPullPlayerUITests/Pods-PLPullPlayerUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		751C5CE982B1BF1A8E5813D3 /* libPods-PLPullPlayer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PLPullPlayer.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DBC7E9028A6166CBF7D2245 /* libPods-PLPullPlayerTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PLPullPlayerTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -120,7 +100,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				66618BE923CB00C6000FAA14 /* PLPlayerKit.framework in Frameworks */,
 				A53E0813654DBC72DBE7EAB3 /* libPods-PLPullPlayer.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -213,8 +192,6 @@
 		66E3B23023CA172F003BDF50 /* LivePush */ = {
 			isa = PBXGroup;
 			children = (
-				66E3B23523CA19AB003BDF50 /* NewKSYLivePushView.h */,
-				66E3B23223CA19AB003BDF50 /* NewKSYLivePushView.m */,
 				66E3B23323CA19AB003BDF50 /* SpreadButton.h */,
 				66E3B23423CA19AB003BDF50 /* SpreadButton.m */,
 			);
@@ -257,7 +234,6 @@
 		A443CDBECA2DEC15D54575DC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				66FB49C723CAFE05004099D9 /* PLPlayerKit.framework */,
 				751C5CE982B1BF1A8E5813D3 /* libPods-PLPullPlayer.a */,
 				7DBC7E9028A6166CBF7D2245 /* libPods-PLPullPlayerTests.a */,
 				CA4CE76EF803251ED96D7606 /* libPods-PLPullPlayerUITests.a */,
@@ -289,8 +265,7 @@
 				66B8FDA523CA14D800ACF3F9 /* Sources */,
 				66B8FDA623CA14D800ACF3F9 /* Frameworks */,
 				66B8FDA723CA14D800ACF3F9 /* Resources */,
-				FBE84C649B55C9E6F449ABE6 /* [CP] Copy Pods Resources */,
-				66618BEB23CB00C7000FAA14 /* Embed Frameworks */,
+				E9231E50DA091A4EA84777CE /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -453,6 +428,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		E9231E50DA091A4EA84777CE /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PLPullPlayer/Pods-PLPullPlayer-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PLPullPlayer/Pods-PLPullPlayer-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PLPullPlayer/Pods-PLPullPlayer-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		F0EF9D1E2AF95E71F40693DF /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -475,23 +467,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		FBE84C649B55C9E6F449ABE6 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PLPullPlayer/Pods-PLPullPlayer-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PLPullPlayer/Pods-PLPullPlayer-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PLPullPlayer/Pods-PLPullPlayer-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -509,7 +484,6 @@
 				66B8FDBF23CA14DB00ACF3F9 /* main.m in Sources */,
 				66E3B25323CA1B84003BDF50 /* OFweekPlayerTestVC.m in Sources */,
 				66E3B24F23CA1B84003BDF50 /* OFweekPlayerControlsView.m in Sources */,
-				66E3B23623CA19AB003BDF50 /* NewKSYLivePushView.m in Sources */,
 				66E3B24E23CA1B84003BDF50 /* LivePlayerControlsView.m in Sources */,
 				66E3B25123CA1B84003BDF50 /* OFweekPlayerVideoItem.m in Sources */,
 				66E3B24D23CA1B84003BDF50 /* VODPlayerControlsView.m in Sources */,
@@ -684,10 +658,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 76RA22T2W7;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-				);
 				INFOPLIST_FILE = PLPullPlayer/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -707,10 +677,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 76RA22T2W7;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-				);
 				INFOPLIST_FILE = PLPullPlayer/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
