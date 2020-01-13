@@ -52,6 +52,14 @@ typedef NS_ENUM(NSInteger, OFweekPlayerNetState){
     OFweekPlayerNetStateDenied = 3
 };
 
+typedef void(^NaturalSizeBlock)(void);
+
+//2018.10.30添加旋转响应
+typedef void(^OrientationBlock)(BOOL isProtrait);
+
+//2018.11.8添加暂停、播放block
+typedef void(^PauseOrPlayBlock)(BOOL isPause);
+
 @interface OFweekPlayer : UIView
 
 /**
@@ -63,6 +71,12 @@ typedef NS_ENUM(NSInteger, OFweekPlayerNetState){
 @b 播放器上的子控件
 */
 @property (strong, nonatomic) OFweekPlayerControlsView *controlsView;
+
+@property (copy, nonatomic) NaturalSizeBlock naturalSizeBlock;
+
+@property (copy, nonatomic) OrientationBlock orientationBlock;
+
+@property (copy, nonatomic) PauseOrPlayBlock pauseBlock;
 
 /**
  @b 当前直播模式

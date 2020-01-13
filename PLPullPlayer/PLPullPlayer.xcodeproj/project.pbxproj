@@ -26,6 +26,8 @@
 		66E3B25123CA1B84003BDF50 /* OFweekPlayerVideoItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E3B24723CA1B84003BDF50 /* OFweekPlayerVideoItem.m */; };
 		66E3B25223CA1B84003BDF50 /* OFweekPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E3B24823CA1B84003BDF50 /* OFweekPlayer.m */; };
 		66E3B25323CA1B84003BDF50 /* OFweekPlayerTestVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E3B24A23CA1B84003BDF50 /* OFweekPlayerTestVC.m */; };
+		A01F289923CC41CC00D1DB98 /* NewKSYLivePushView.m in Sources */ = {isa = PBXBuildFile; fileRef = A01F289823CC41CC00D1DB98 /* NewKSYLivePushView.m */; };
+		A01F289C23CC41D600D1DB98 /* KYSLiveTestVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A01F289A23CC41D600D1DB98 /* KYSLiveTestVC.m */; };
 		A53E0813654DBC72DBE7EAB3 /* libPods-PLPullPlayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 751C5CE982B1BF1A8E5813D3 /* libPods-PLPullPlayer.a */; };
 		DC0D6A9E6B27DBC1B8EF86E4 /* libPods-PLPullPlayerUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CA4CE76EF803251ED96D7606 /* libPods-PLPullPlayerUITests.a */; };
 /* End PBXBuildFile section */
@@ -90,6 +92,10 @@
 		6EF02945F3901FE987C4FD43 /* Pods-PLPullPlayerUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PLPullPlayerUITests.debug.xcconfig"; path = "Target Support Files/Pods-PLPullPlayerUITests/Pods-PLPullPlayerUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		751C5CE982B1BF1A8E5813D3 /* libPods-PLPullPlayer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PLPullPlayer.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DBC7E9028A6166CBF7D2245 /* libPods-PLPullPlayerTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PLPullPlayerTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A01F289723CC41CC00D1DB98 /* NewKSYLivePushView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewKSYLivePushView.h; sourceTree = "<group>"; };
+		A01F289823CC41CC00D1DB98 /* NewKSYLivePushView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewKSYLivePushView.m; sourceTree = "<group>"; };
+		A01F289A23CC41D600D1DB98 /* KYSLiveTestVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KYSLiveTestVC.m; sourceTree = "<group>"; };
+		A01F289B23CC41D600D1DB98 /* KYSLiveTestVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KYSLiveTestVC.h; sourceTree = "<group>"; };
 		CA4CE76EF803251ED96D7606 /* libPods-PLPullPlayerUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PLPullPlayerUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF4505CA0E6759A167474858 /* Pods-PLPullPlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PLPullPlayer.debug.xcconfig"; path = "Target Support Files/Pods-PLPullPlayer/Pods-PLPullPlayer.debug.xcconfig"; sourceTree = "<group>"; };
 		FD09A5A4EE1F7545F5126E3B /* Pods-PLPullPlayerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PLPullPlayerTests.release.xcconfig"; path = "Target Support Files/Pods-PLPullPlayerTests/Pods-PLPullPlayerTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -183,7 +189,7 @@
 		66E3B22F23CA15EC003BDF50 /* Class */ = {
 			isa = PBXGroup;
 			children = (
-				66E3B23123CA1742003BDF50 /* LivePlayer */,
+				66E3B23823CA1B84003BDF50 /* OFweekPlayerSDK */,
 				66E3B23023CA172F003BDF50 /* LivePush */,
 			);
 			path = Class;
@@ -192,18 +198,14 @@
 		66E3B23023CA172F003BDF50 /* LivePush */ = {
 			isa = PBXGroup;
 			children = (
+				A01F289B23CC41D600D1DB98 /* KYSLiveTestVC.h */,
+				A01F289A23CC41D600D1DB98 /* KYSLiveTestVC.m */,
+				A01F289723CC41CC00D1DB98 /* NewKSYLivePushView.h */,
+				A01F289823CC41CC00D1DB98 /* NewKSYLivePushView.m */,
 				66E3B23323CA19AB003BDF50 /* SpreadButton.h */,
 				66E3B23423CA19AB003BDF50 /* SpreadButton.m */,
 			);
 			path = LivePush;
-			sourceTree = "<group>";
-		};
-		66E3B23123CA1742003BDF50 /* LivePlayer */ = {
-			isa = PBXGroup;
-			children = (
-				66E3B23823CA1B84003BDF50 /* OFweekPlayerSDK */,
-			);
-			path = LivePlayer;
 			sourceTree = "<group>";
 		};
 		66E3B23823CA1B84003BDF50 /* OFweekPlayerSDK */ = {
@@ -266,6 +268,7 @@
 				66B8FDA623CA14D800ACF3F9 /* Frameworks */,
 				66B8FDA723CA14D800ACF3F9 /* Resources */,
 				E9231E50DA091A4EA84777CE /* [CP] Embed Pods Frameworks */,
+				15F5126FAC8F4CB5501A3D2F /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -384,6 +387,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		15F5126FAC8F4CB5501A3D2F /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PLPullPlayer/Pods-PLPullPlayer-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PLPullPlayer/Pods-PLPullPlayer-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PLPullPlayer/Pods-PLPullPlayer-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		4B68A060CAC93E4859BDA028 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -480,11 +500,13 @@
 				66E3B25223CA1B84003BDF50 /* OFweekPlayer.m in Sources */,
 				66B8FDB423CA14D800ACF3F9 /* ViewController.m in Sources */,
 				66E3B24B23CA1B84003BDF50 /* PicPlayerControlsView.m in Sources */,
+				A01F289C23CC41D600D1DB98 /* KYSLiveTestVC.m in Sources */,
 				66B8FDAE23CA14D800ACF3F9 /* AppDelegate.m in Sources */,
 				66B8FDBF23CA14DB00ACF3F9 /* main.m in Sources */,
 				66E3B25323CA1B84003BDF50 /* OFweekPlayerTestVC.m in Sources */,
 				66E3B24F23CA1B84003BDF50 /* OFweekPlayerControlsView.m in Sources */,
 				66E3B24E23CA1B84003BDF50 /* LivePlayerControlsView.m in Sources */,
+				A01F289923CC41CC00D1DB98 /* NewKSYLivePushView.m in Sources */,
 				66E3B25123CA1B84003BDF50 /* OFweekPlayerVideoItem.m in Sources */,
 				66E3B24D23CA1B84003BDF50 /* VODPlayerControlsView.m in Sources */,
 			);

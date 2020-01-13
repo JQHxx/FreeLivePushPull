@@ -86,7 +86,7 @@ const CGFloat VODBottomControlsView_HEIGHT = 55.0f;
     
     // 重新设置进度条的宽度
     [_progressSlider removeConstraint:_sliderWidthConstraint];
-    _sliderWidthConstraint = [NSLayoutConstraint constraintWithItem:_progressSlider attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:self.frame.size.width-200];
+    _sliderWidthConstraint = [NSLayoutConstraint constraintWithItem:_progressSlider attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:self.frame.size.width-205];
     [_progressSlider addConstraint:_sliderWidthConstraint];
 }
 
@@ -325,7 +325,7 @@ const CGFloat VODBottomControlsView_HEIGHT = 55.0f;
     [_bottomControlsView addSubview:_leftDurationLabel];
     NSLayoutConstraint *constraint;
     //leftDurationLabel right
-    constraint = [NSLayoutConstraint constraintWithItem:_leftDurationLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:_smallStartButton attribute:NSLayoutAttributeRight multiplier:1.0f constant:8.0f];
+    constraint = [NSLayoutConstraint constraintWithItem:_leftDurationLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:_smallStartButton attribute:NSLayoutAttributeRight multiplier:1.0f constant:5.0f];
     [_bottomControlsView addConstraint:constraint];
     //leftDurationLabel CenterY
     constraint = [NSLayoutConstraint constraintWithItem:_leftDurationLabel attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:_bottomControlsView attribute:NSLayoutAttributeCenterY multiplier:1.0f constant:0.0f];
@@ -369,9 +369,7 @@ const CGFloat VODBottomControlsView_HEIGHT = 55.0f;
 #pragma mark - delegate
 - (void)sliderTouchBegin:(float)value {
     NSLog(@"滑杆开始滑动===%f", value);
-    
     self.resetThisTicker = YES;
-    
     //    [self.delegate progressSliderTouchDown];
 }
 
@@ -419,14 +417,14 @@ const CGFloat VODBottomControlsView_HEIGHT = 55.0f;
 
     NSLayoutConstraint *constraint;
     //_progressSlider Left
-    constraint = [NSLayoutConstraint constraintWithItem:_progressSlider attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:_bottomControlsView attribute:NSLayoutAttributeLeft multiplier:1.0f constant:95.0f];
+    constraint = [NSLayoutConstraint constraintWithItem:_progressSlider attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:_bottomControlsView attribute:NSLayoutAttributeLeft multiplier:1.0f constant:105.0f];
     [_bottomControlsView addConstraint:constraint];
     //durationLabel CenterY
     constraint = [NSLayoutConstraint constraintWithItem:_progressSlider attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:_bottomControlsView attribute:NSLayoutAttributeCenterY multiplier:1.0f constant:0.0f];
     [_bottomControlsView addConstraint:constraint];
     
     //progressSlider width
-    _sliderWidthConstraint = [NSLayoutConstraint constraintWithItem:_progressSlider attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:self.frame.size.width-200];
+    _sliderWidthConstraint = [NSLayoutConstraint constraintWithItem:_progressSlider attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:self.frame.size.width-205];
     [_progressSlider addConstraint:_sliderWidthConstraint];
     //progressSlider height
     constraint = [NSLayoutConstraint constraintWithItem:_progressSlider attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:30];
@@ -443,11 +441,17 @@ const CGFloat VODBottomControlsView_HEIGHT = 55.0f;
     [_bottomControlsView addSubview:_smallStartButton];
     NSLayoutConstraint *constraint;
     //smallStartButton left
-    constraint = [NSLayoutConstraint constraintWithItem:_smallStartButton attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:_bottomControlsView attribute:NSLayoutAttributeLeft multiplier:1.0f constant:8.0f];
+    constraint = [NSLayoutConstraint constraintWithItem:_smallStartButton attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:_bottomControlsView attribute:NSLayoutAttributeLeft multiplier:1.0f constant:15.0f];
     [_bottomControlsView addConstraint:constraint];
     //smallStartButton CenterY
     constraint = [NSLayoutConstraint constraintWithItem:_smallStartButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:_bottomControlsView attribute:NSLayoutAttributeCenterY multiplier:1.0f constant:0.0f];
     [_bottomControlsView addConstraint:constraint];
+    //smallStartButton width & height
+    constraint = [NSLayoutConstraint constraintWithItem:_smallStartButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:30.0f];
+    [_bottomControlsView addConstraint:constraint];
+    constraint = [NSLayoutConstraint constraintWithItem:_smallStartButton attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:30.0f];
+    [_bottomControlsView addConstraint:constraint];
+    
     [_smallStartButton addTarget:self action:@selector(startButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
 }
 

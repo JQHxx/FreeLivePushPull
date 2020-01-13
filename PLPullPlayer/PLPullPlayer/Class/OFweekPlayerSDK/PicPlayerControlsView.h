@@ -1,13 +1,15 @@
 //
-//  WaitingPlayerControlsView.h
+//  PicPlayerControlsView.h
 //  IEduChina
 //
-//  Created by 胡晓伟 on 2018/9/15.
+//  Created by huxiaowei on 2018/2/11.
 //
 
 #import <UIKit/UIKit.h>
 #import "OFweekPlayerControlsView.h"
 
-@interface WaitingPlayerControlsView : OFweekPlayerControlsView
+@interface PicPlayerControlsView : OFweekPlayerControlsView
+
 @property (strong, nonatomic) UIView *bottomControlsView;
+
 @end

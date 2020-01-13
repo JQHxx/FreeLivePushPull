@@ -405,8 +405,8 @@
     //self.player.view HEIGHT
     _playerHeightConstraint = [NSLayoutConstraint constraintWithItem:self.player.playerView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:self.bounds.size.height];
     [self addConstraint:_playerHeightConstraint];
-
-    [self initControlsView];
+    
+     [self initControlsView];
     
     if(self.playerMode == OFweekPlayerModeLIVE || self.playerMode == OFweekPlayerModeVOD) {
         [self.controlsView setActivityIndicatiorViewHidden:NO];
@@ -422,6 +422,12 @@
 - (void)initControlsView {
     if(_playerMode == OFweekPlayerModeVOD) {
         _controlsView = [[VODPlayerControlsView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)];
+        if(_vodVideoItems.count>0) {
+            OFweekPlayerVideoItem *videoItem = (OFweekPlayerVideoItem *)_vodVideoItems[0];
+            if(videoItem.videoCover && videoItem.videoCover.length>0) {
+                [_controlsView setCoverImage:videoItem.videoCover];
+            }
+        }
     }
     else if(_playerMode == OFweekPlayerModeLIVE) {
         _controlsView = [[LivePlayerControlsView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)];
@@ -431,6 +437,10 @@
     }
     else {
         _controlsView = [[WaitingPlayerControlsView  alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)];
+        if (self.bgImageUrl) {
+            [_controlsView setCoverImage:self.bgImageUrl];
+        }
+        
     }
 //    [_controlsView setShowSeconds:15];
     NSLog(@"实际设置的显示秒数为：%d",_showControlsSeconds);
@@ -483,7 +493,9 @@
 }
 
 - (void)player:(nonnull PLPlayer *)player width:(int)width height:(int)height {
-    
+    if (_naturalSizeBlock && width!=0 && height!=0) {
+        _naturalSizeBlock();
+    }
 }
 
 #pragma mark - 读取状态改变
@@ -516,13 +528,15 @@
 
 // 更新进度条
 - (void)updateDuration {
-    Float64 currentPlaybackTime = CMTimeGetSeconds(self.player.currentTime);
-    Float64 duration = CMTimeGetSeconds(self.player.totalDuration);
-    float positionPercent = currentPlaybackTime/duration;
-    [self.controlsView updateProgressSliderPosition:positionPercent];
-    NSString *strTime1 = [self timeFormatted:currentPlaybackTime + 1];
-    NSString *strTime2 = [self timeFormatted:duration];
-    [self.controlsView updateDurationLabel:strTime1 durationString:strTime2];
+    if (self.player.status != PLPlayerStatusUnknow) {
+        Float64 currentPlaybackTime = CMTimeGetSeconds(self.player.currentTime);
+        Float64 duration = CMTimeGetSeconds(self.player.totalDuration);
+        float positionPercent = currentPlaybackTime/duration;
+        [self.controlsView updateProgressSliderPosition:positionPercent];
+        NSString *strTime1 = [self timeFormatted:currentPlaybackTime + 1];
+        NSString *strTime2 = [self timeFormatted:duration];
+        [self.controlsView updateDurationLabel:strTime1 durationString:strTime2];
+    }
 }
 
 - (void)moviePlayBackStateDidChange:(NSNotification*)notification {
@@ -559,18 +573,24 @@
             break;
         }
         case PLPlayerStatusPlaying: {
+            if (_pauseBlock) {
+                _pauseBlock(YES);
+            }
             NSLog(@"moviePlayBackStateDidChange %d: playing,hxw", (int)_player.status);
             [self.controlsView updateControlsWithPlayerState:OFweekPlayerStatePlaying];
             [self.controlsView setActivityIndicatiorViewHidden:YES];
             _controlsView.hidden = NO;
             if(_playerMode == OFweekPlayerModeLIVE && self.isSeeked == NO && _isVodLive) {
-                // 快进
+                // 快进 CMTimeMake 第一个参数 除以 第二个参数就是快进的秒数
                 [self.player seekTo:CMTimeMake(self.vodliveSeekTime * 1000, 1000)];
                 self.isSeeked = YES;
             }
             break;
         }
         case PLPlayerStatusPaused: {
+            if (_pauseBlock) {
+                 _pauseBlock(NO);
+             }
             NSLog(@"moviePlayBackStateDidChange %d: paused,hxw", (int)_player.status);
             if(!_unplayableTimer) {
                 [self.controlsView updateControlsWithPlayerState:OFweekPlayerStatePaused];
@@ -735,14 +755,23 @@
         if(orientation == UIInterfaceOrientationLandscapeRight) {
             [self rotateFromAngle:LANDSCAPE_RIGHT_ANGLE curOrientation:tempCurOrientation];
             [_controlsView updateControlsWithFullScreenState:YES];
+            if (_orientationBlock) {
+                _orientationBlock(NO);
+            }
         }
         else if(orientation == UIInterfaceOrientationLandscapeLeft) {
             [self rotateFromAngle:LANDSCAPE_LEFT_ANGLE curOrientation:tempCurOrientation];
             [_controlsView updateControlsWithFullScreenState:YES];
+            if (_orientationBlock) {
+                _orientationBlock(NO);
+            }
         }
         else if(orientation == UIInterfaceOrientationPortrait) {
             [self rotateFromAngle:PROTRAIT_ANGLE curOrientation:tempCurOrientation];
             [_controlsView updateControlsWithFullScreenState:NO];
+            if (_orientationBlock) {
+                 _orientationBlock(YES);
+             }
         }
     }
 }

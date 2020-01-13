@@ -58,10 +58,15 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
+    CGRect rect = self.bgProgressView.frame;
     if (self.sliderBtn.hidden) {
-        self.bgProgressView.gk_width   = self.gk_width;
+        rect.size.width = self.bounds.size.width;
+        self.bgProgressView.frame = rect;
+        //self.bgProgressView.gk_width   = self.bounds.size.width;
     }else {
-        self.bgProgressView.gk_width   = self.gk_width - kProgressMargin * 2;
+        rect.size.width = self.bounds.size.width- kProgressMargin * 2;
+        self.bgProgressView.frame = rect;
+        //self.bgProgressView.gk_width   = self.bounds.size.width - kProgressMargin * 2;
     }
     
     self.bgProgressView.gk_centerY     = self.gk_height * 0.5;
@@ -140,10 +145,10 @@
 - (void)setValue:(float)value {
     _value = value;
 
-    CGFloat finishValue  = self.bgProgressView.gk_width * value;
+    CGFloat finishValue  = self.bgProgressView.bounds.size.width * value;
     self.sliderProgressView.gk_width = finishValue;
     
-    self.sliderBtn.gk_left = (self.gk_width - self.sliderBtn.gk_width) * value;
+    self.sliderBtn.gk_left = (self.bounds.size.width - self.sliderBtn.bounds.size.width) * value;
     
     self.lastPoint = self.sliderBtn.center;
 }
@@ -151,7 +156,7 @@
 - (void)setBufferValue:(float)bufferValue {
     _bufferValue = bufferValue;
     
-    CGFloat finishValue = self.bgProgressView.gk_width * bufferValue;
+    CGFloat finishValue = self.bgProgressView.bounds.size.width * bufferValue;
 
     self.bufferProgressView.gk_width = finishValue;
 }
@@ -355,6 +360,9 @@
 @implementation UIView (GKFrame)
 
 - (void)setGk_left:(CGFloat)gk_left{
+    if (isnan(gk_left)) {
+        return;
+    }
     CGRect f = self.frame;
     f.origin.x = gk_left;
     self.frame = f;
@@ -395,6 +403,9 @@
 }
 
 - (void)setGk_width:(CGFloat)gk_width {
+    if(isnan(gk_width)) {
+        return;
+    }
     CGRect f = self.frame;
     f.size.width = gk_width;
     self.frame = f;
