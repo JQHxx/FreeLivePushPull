@@ -45,6 +45,7 @@
  * @b 拉取当前播放进度
  */
 @property (strong, nonatomic) MSWeakTimer *durationTimer;
+@property (nonatomic, strong) UIImage *bgImage;
 
 @end
 
@@ -77,15 +78,12 @@
     return self;
 }
 
-- (void)dealloc
-{
+- (void)dealloc {
     NSLog(@"OFweekPlayer dealloc");
-    [self removeDurationTimer];
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-
 }
 
 - (void)addBgImageView {
@@ -152,13 +150,14 @@
         // 支持循环播放
         [self.player setLoopPlay:_isVODCycle];
     }
-    NSLog(@"阿刁,%@,%@",NSStringFromCGRect(self.bounds),NSStringFromCGRect(self.frame));
+    // NSLog(@"Frame,%@,%@",NSStringFromCGRect(self.bounds),NSStringFromCGRect(self.frame));
     self.player.playerView.frame = self.bounds;
     self.player.delegate = self;
     self.player.playerView.contentMode = UIViewContentModeScaleAspectFit;
     self.player.delegateQueue = dispatch_get_main_queue();
     [self.player setAutoReconnectEnable:NO];
     self.player.playerView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.player.launchView.image = self.bgImage;
     [self addSubview:self.player.playerView];
     // 放到上层
     [self bringSubviewToFront:self.controlsView];
@@ -213,6 +212,7 @@
 
 #pragma mark - PLPlayerDelegate
 - (void)player:(nonnull PLPlayer *)player statusDidChange:(PLPlayerStatus)state {
+    NSLog(@"当前播放状态 %ld", (long)state);
     switch (state) {
         case PLPlayerStatusUnknow:
             break;
@@ -254,6 +254,10 @@
 
 }
 
+- (void)player:(nonnull PLPlayer *)player firstRender:(PLPlayerFirstRenderType)firstRenderType {
+    
+}
+
 - (void)player:(nonnull PLPlayer *)player width:(int)width height:(int)height {
     if (_naturalSizeBlock && width!=0 && height!=0) {
         _naturalSizeBlock();
@@ -271,16 +275,6 @@
         [_durationTimer invalidate];
         _durationTimer = nil;
     }
-}
-
-- (void)updateDuration {
-    CGFloat currentPlaybackTime = CMTimeGetSeconds(self.player.currentTime);
-    CGFloat duration = CMTimeGetSeconds(self.player.totalDuration);
-    float positionPercent = currentPlaybackTime/duration;
-    [self.controlsView updateProgressSliderPosition:positionPercent];
-    NSString *strTime1 = [self timeFormatted:currentPlaybackTime];
-    NSString *strTime2 = [self timeFormatted:duration];
-    [self.controlsView updateDurationLabel:[NSString stringWithFormat:@"%@/%@",strTime1,strTime2]];
 }
 
 #pragma mark - 播放器PPT模块初始化
@@ -331,6 +325,18 @@
     //_noticeLabel HEIGHT
     _noticeLabelHeightConstraint = [NSLayoutConstraint constraintWithItem:_noticeLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:self.frame.size.height];
     [self addConstraint:_noticeLabelHeightConstraint];
+}
+
+#pragma mark - Event response
+// 更新播放进度条
+- (void)updateDuration {
+    CGFloat currentPlaybackTime = CMTimeGetSeconds(self.player.currentTime);
+    CGFloat duration = CMTimeGetSeconds(self.player.totalDuration);
+    float positionPercent = currentPlaybackTime/duration;
+    [self.controlsView updateProgressSliderPosition:positionPercent];
+    NSString *strTime1 = [self timeFormatted:currentPlaybackTime];
+    NSString *strTime2 = [self timeFormatted:duration];
+    [self.controlsView updateDurationLabel:[NSString stringWithFormat:@"%@/%@",strTime1,strTime2]];
 }
 
 #pragma mark - 设置控件栏是否可见
@@ -393,6 +399,18 @@
     _noticeLabel.hidden = hidden;
 }
 
+#pragma mark - Setter & Getter
+- (UIImage *)bgImage {
+    if (!_bgImage) {
+        NSURL *imageUrl = [NSURL URLWithString:_bgImgUrl];
+        UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageUrl]];
+        if(!image) {
+            image = [UIImage imageNamed:@"LiveBg"];
+        }
+        _bgImage = image;
+    }
+    return _bgImage;
+}
 
 #pragma mark - 开始播放
 - (void)start {
@@ -402,11 +420,19 @@
         return;
     }
     
+    //[self.controlsView updateControlsWithPlayerState:PLPlayerStatusReady];
+    [self.controlsView setActivityIndicatiorViewHidden:NO];
+    if(self.pptImageView.hidden==NO) {
+        [self.controlsView setActivityIndicatiorViewHidden:YES];
+    }
+    self.bgImageView.hidden = YES;
+    
     if (!self.player) {
         [self initPlayer];
         [self addDurationTimer];
         [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
+        return;
     }
     
     if(self.playerMode == OFweekPlayerModeVOD) {
@@ -417,36 +443,38 @@
         OFweekPlayerVideoItem *videoItem = self.vodVideoItems[curVideoItemIndex];
         if (videoItem.videoUrl.length > 0) {
             [self.player openPlayerWithURL:[NSURL URLWithString:videoItem.videoUrl]];
-            [self.player play];
+            if (curVideoItemIndex > 0) {
+                self.player.launchView.image = nil;
+                [self.player play];
+            } else if (curVideoItemIndex == 0 && _isVODCycle) {
+                [self.player play];
+            } else {
+                self.player.launchView.image = self.bgImage;
+                [self.controlsView updateControlsWithPlayerState:PLPlayerStatusReady];
+            }
+
         }
-    }
-    else {
+    }else {
         if(!_liveStreamUrl || [_liveStreamUrl isEqual:@""]) {
             NSLog(@"当前为live模式，但liveStream不存在");
             return;
         }
         [self.player openPlayerWithURL:[NSURL URLWithString:self.liveStreamUrl]];
-        [self.player play];
+        if (_isVODCycle) {
+            [self.player play];
+        }
     }
     
-    [self.controlsView updateControlsWithPlayerState:2];
-    [self.controlsView setActivityIndicatiorViewHidden:NO];
-    if(self.pptImageView.hidden==NO) {
-        [self.controlsView setActivityIndicatiorViewHidden:YES];
-    }
-
-    //NSLog(@"self.player.playbackState88:%ld",(long)self.player.playbackState);
-    if (self.player.status == PLPlayerStatusPlaying || self.player.status ==PLPlayerStatusError) {
-        [self.player stop];
-    }
-    self.bgImageView.hidden = YES;
 }
 
 #pragma mark - OFweekPlayerControlsViewDelegate begin
 #pragma mark - 播放器进度条拖动或点击
 - (void)progressSliderValueChanged:(float)value {
     CGFloat duration = CMTimeGetSeconds(self.player.totalDuration);
-    [self.player seekTo:CMTimeMake(duration * value * 1000, 1000)];
+    if (duration && value) {
+        [self.player seekTo:CMTimeMake(duration * value * 1000, 1000)];
+    }
+    
 }
 
 #pragma mark - 播放器开始按钮点击
@@ -462,8 +490,14 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
     }
     
+    // 首次播放状态是  PLPlayerStatusPreparing
+    // 切换链接播放 PLPlayerStatusOpen
+    NSLog(@"当前播放状态 %ld", (long)self.player.status);
+        
     if(_playAuth == PlayAuthSuspend) {
-        [self.delegate PlayAuthSuspendAction];
+        if ([self.delegate respondsToSelector:@selector(PlayAuthSuspendAction)]) {
+            [self.delegate PlayAuthSuspendAction];
+        }
     }
     if (self.player.status == PLPlayerStatusPlaying) {
         [self.player pause];
@@ -478,6 +512,8 @@
                 [self start];
             }
         }
+    } else if(self.player.status == PLPlayerStatusOpen || self.player.status == PLPlayerStatusUnknow){ // 切换链接播放
+        [self.player play];
     }
 }
 
@@ -598,8 +634,6 @@
     
     if (curOrientation == UIInterfaceOrientationPortrait) {
         [self removeFromSuperview];
-//        [[[[UIApplication sharedApplication] windows] lastObject] addSubview:self];
-        
         [[UIApplication sharedApplication].keyWindow addSubview:self];
         NSLog(@"%@", self);
     }
@@ -680,7 +714,7 @@
         }
         [self start];
     } else {
-        if (_isVODCycle && _playerMode == OFweekPlayerModeVODLIVE && self.player.status == PLPlayerStatusCompleted ) {
+        if (_isVODCycle && _playerMode == OFweekPlayerModeVODLIVE && self.player.status == PLPlayerStatusCompleted) {
             //VOD循环播放模式
             if (_focusVodStop == NO) {
                 //自然播放完毕不是手动关闭VOD
@@ -754,15 +788,7 @@
     [self.player stop];
     [self.player.playerView removeFromSuperview];
     self.player = nil;
-}
-
-#pragma mark - Setter & Getter
-- (void)setLiveStreamUrl:(NSString *)liveStreamUrl {
-    _liveStreamUrl = liveStreamUrl;
-}
-
-- (void)setIsVODCycle:(BOOL)isVODCycle {
-    _isVODCycle = isVODCycle;
+    [self removeDurationTimer];
 }
 
 @end

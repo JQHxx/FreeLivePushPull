@@ -71,8 +71,8 @@ const CGFloat BottomControlsView_HEIGHT = 55.0f;
     
 
     
-        _cachingView = [[UIView alloc] init];
-        _cachingView.translatesAutoresizingMaskIntoConstraints = NO;
+    _cachingView = [[UIView alloc] init];
+    _cachingView.translatesAutoresizingMaskIntoConstraints = NO;
 //        _cachingView.backgroundColor = [UIColor yellowColor];
 //    _cachingView.alpha = .5;
         [self addSubview:_cachingView];
@@ -349,6 +349,9 @@ const CGFloat BottomControlsView_HEIGHT = 55.0f;
     if(coverUrl && coverUrl.length>0) {
         NSURL *imageUrl = [NSURL URLWithString:coverUrl];
         UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageUrl]];
+        if(!image) {
+            image = [UIImage imageNamed:@"LiveBg"];
+        }
         _videoCoverImage.image = image;
     }
     else {
@@ -369,17 +372,16 @@ const CGFloat BottomControlsView_HEIGHT = 55.0f;
 
 #pragma mark - 根据播放状态更新部分控件状态
 - (void)updateControlsWithPlayerState:(PLPlayerStatus)state {
-    if(state==PLPlayerStatusPlaying) {
+    if(state == PLPlayerStatusPlaying) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [_smallStartButton setImage:[UIImage imageNamed:@"LivePlayerPause_Small"] forState:UIControlStateNormal];
             _bigStartButton.hidden = YES;
             _videoCoverImage.hidden = YES;
         });
-    } else if(state==PLPlayerStatusPaused || state == PLPlayerStatusReady) {
+    } else if(state == PLPlayerStatusPaused || state == PLPlayerStatusReady) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [_smallStartButton setImage:[UIImage imageNamed:@"LivePlayerStart_Small"] forState:UIControlStateNormal];
             _bigStartButton.hidden = NO;
-            
             [_activityIndicatiorView stopAnimating];
             _activityIndicatiorView.hidden = YES;
         });
