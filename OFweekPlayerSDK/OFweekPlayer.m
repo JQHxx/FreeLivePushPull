@@ -443,16 +443,7 @@
         OFweekPlayerVideoItem *videoItem = self.vodVideoItems[curVideoItemIndex];
         if (videoItem.videoUrl.length > 0) {
             [self.player openPlayerWithURL:[NSURL URLWithString:videoItem.videoUrl]];
-            if (curVideoItemIndex > 0) {
-                self.player.launchView.image = nil;
-                [self.player play];
-            } else if (curVideoItemIndex == 0 && _isVODCycle) {
-                [self.player play];
-            } else {
-                self.player.launchView.image = self.bgImage;
-                [self.controlsView updateControlsWithPlayerState:PLPlayerStatusReady];
-            }
-
+            [self.player play];
         }
     }else {
         if(!_liveStreamUrl || [_liveStreamUrl isEqual:@""]) {
@@ -460,11 +451,59 @@
             return;
         }
         [self.player openPlayerWithURL:[NSURL URLWithString:self.liveStreamUrl]];
-        if (_isVODCycle) {
-            [self.player play];
-        }
+        [self.player play];
     }
-    
+}
+
+- (void) _start {
+    NSLog(@"_start");
+     if(_playAuth==PlayAuthDisabled || _playAuth==PlayAuthSuspend || _playAuth==PlayAuthUnspecified) {
+         return;
+     }
+     
+     //[self.controlsView updateControlsWithPlayerState:PLPlayerStatusReady];
+     [self.controlsView setActivityIndicatiorViewHidden:NO];
+     if(self.pptImageView.hidden==NO) {
+         [self.controlsView setActivityIndicatiorViewHidden:YES];
+     }
+     self.bgImageView.hidden = YES;
+     
+     if (!self.player) {
+         [self initPlayer];
+         [self addDurationTimer];
+         [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
+     }
+     
+     if(self.playerMode == OFweekPlayerModeVOD) {
+         if(!_vodVideoItems || _vodVideoItems.count==0) {
+             NSLog(@"当前为vod模式，但播放文件为空");
+             return;
+         }
+         OFweekPlayerVideoItem *videoItem = self.vodVideoItems[curVideoItemIndex];
+         if (videoItem.videoUrl.length > 0) {
+             [self.player openPlayerWithURL:[NSURL URLWithString:videoItem.videoUrl]];
+             if (curVideoItemIndex > 0) {
+                 self.player.launchView.image = nil;
+                 [self.player play];
+             } else if (curVideoItemIndex == 0 && _isVODCycle) {
+                 [self.player play];
+             } else {
+                 self.player.launchView.image = self.bgImage;
+                 [self.controlsView updateControlsWithPlayerState:PLPlayerStatusReady];
+             }
+
+         }
+     }else {
+         if(!_liveStreamUrl || [_liveStreamUrl isEqual:@""]) {
+             NSLog(@"当前为live模式，但liveStream不存在");
+             return;
+         }
+         [self.player openPlayerWithURL:[NSURL URLWithString:self.liveStreamUrl]];
+         if (_isVODCycle) {
+             [self.player play];
+         }
+     }
 }
 
 #pragma mark - OFweekPlayerControlsViewDelegate begin
@@ -483,22 +522,24 @@
         return;
     }
     
-    if (!self.player) {
-        [self initPlayer];
-        [self addDurationTimer];
-        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
-    }
-    
-    // 首次播放状态是  PLPlayerStatusPreparing
-    // 切换链接播放 PLPlayerStatusOpen
-    NSLog(@"当前播放状态 %ld", (long)self.player.status);
-        
     if(_playAuth == PlayAuthSuspend) {
         if ([self.delegate respondsToSelector:@selector(PlayAuthSuspendAction)]) {
             [self.delegate PlayAuthSuspendAction];
         }
     }
+    
+    if (!self.player) {
+        [self initPlayer];
+        [self addDurationTimer];
+        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
+        return;
+    }
+    
+    // 首次播放状态是  PLPlayerStatusPreparing
+    // 切换链接播放 PLPlayerStatusOpen
+    NSLog(@"当前播放状态 %ld", (long)self.player.status);
+
     if (self.player.status == PLPlayerStatusPlaying) {
         [self.player pause];
     }else if(self.player.status == PLPlayerStatusPaused) {
@@ -509,7 +550,7 @@
                 OFweekPlayerVideoItem *videoItem = self.vodVideoItems[0];
                 self.liveStreamUrl = videoItem.videoUrl;
                 self.autoPlay = YES;
-                [self start];
+                [self _start];
             }
         }
     } else if(self.player.status == PLPlayerStatusOpen || self.player.status == PLPlayerStatusUnknow){ // 切换链接播放
@@ -712,13 +753,13 @@
         if(curVideoItemIndex>=self.vodVideoItems.count || curVideoItemIndex<0) {
             curVideoItemIndex = 0;
         }
-        [self start];
+        [self _start];
     } else {
         if (_isVODCycle && _playerMode == OFweekPlayerModeVODLIVE && self.player.status == PLPlayerStatusCompleted) {
             //VOD循环播放模式
             if (_focusVodStop == NO) {
                 //自然播放完毕不是手动关闭VOD
-                [self start];
+                [self _start];
             } 
         }
     }

@@ -232,6 +232,8 @@ const CGFloat BottomControlsView_HEIGHT = 55.0f;
     //加一个手势蒙层end
     
     _progressSlider = [[UISlider alloc] init];
+    _progressSlider.minimumValue = 0.0;
+    _progressSlider.maximumValue = 1.0;
     _progressSlider.translatesAutoresizingMaskIntoConstraints = NO;
     [_progressSlider setThumbImage:[UIImage imageNamed:@"LiveProgressDot"] forState:UIControlStateNormal];
     [_progressSlider setThumbImage:[UIImage imageNamed:@"LiveProgressDot"] forState:UIControlStateHighlighted];
@@ -249,6 +251,8 @@ const CGFloat BottomControlsView_HEIGHT = 55.0f;
     [_progressSlider addTarget:self action:@selector(progressSliderValueChanged:) forControlEvents:UIControlEventValueChanged];
     UITapGestureRecognizer *sliderTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(sliderTaped:)];
     [_progressSlider addGestureRecognizer:sliderTap];
+    // 监听拖动结束后的值
+    [_progressSlider addTarget:self action:@selector(sliderTouchUpInSide:) forControlEvents:UIControlEventTouchUpInside];
     
     //全视图的点击事件
     UITapGestureRecognizer *viewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(viewTaped:)];
@@ -309,11 +313,13 @@ const CGFloat BottomControlsView_HEIGHT = 55.0f;
     [self.delegate startButtonClicked];
 }
 
+
 #pragma mark - 进度条点击
 - (void)sliderTaped:(id)sender {
     UITapGestureRecognizer *tap = (UITapGestureRecognizer *)sender;
     CGPoint location = [tap locationInView:_progressSlider];
     
+    /*
     float value;
     
     if(location.x/_progressSlider.bounds.size.width > _progressSlider.value) {
@@ -322,15 +328,20 @@ const CGFloat BottomControlsView_HEIGHT = 55.0f;
     else {
         value = (location.x-9)/_progressSlider.bounds.size.width;
     }
+     */
     
+    CGFloat value = (_progressSlider.maximumValue - _progressSlider.minimumValue) * (location.x / _progressSlider.frame.size.width );
     _progressSlider.value = value;
     
     [self.delegate progressSliderValueChanged:value];
 }
 
 #pragma mark - 进度条Value主动改变
-- (void)progressSliderValueChanged:(id)sender {
-    UISlider *slider = (UISlider *)sender;
+- (void)progressSliderValueChanged:(UISlider *)slider {
+    
+}
+
+- (void)sliderTouchUpInSide:(UISlider *)slider {
     [self.delegate progressSliderValueChanged:slider.value];
 }
 
